@@ -141,7 +141,6 @@ if "df" in st.session_state:
     grouped = st.session_state["df"].groupby("PRODUCT")["SENTIMENT_SCORE"].mean() 
     st.bar_chart(grouped)
 
-
 # Plotting with Altair
     chart = alt.Chart(filtered_df).mark_bar().add_selection(
             alt.selection_interval()
