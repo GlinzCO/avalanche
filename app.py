@@ -8,7 +8,9 @@ import pandas as pd
 from pathlib import Path
 import string
 from collections import deque
-import altair as alt
+
+import os
+print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
 
 # ------------------- RATE LIMITING SETUP (move to top!) -------------------
 max_requests = 5
@@ -30,7 +32,8 @@ def rate_limited():
 # load environment variables from .env file
 load_dotenv()
 
-st.set_page_config(page_title="Daniel's GenAI App", page_icon=":robot_face:", layout="wide") 
+
+st.set_page_config(page_title="GenAI App", page_icon=":robot_face:", layout="wide") 
 
 
 # CSS get Roboto
@@ -209,6 +212,8 @@ if submit:
         # Name using AI key from environment variable
         with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png"): 
             typewriter(text=text, speed=speed)
+
+
 
 
 

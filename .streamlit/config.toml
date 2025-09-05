@@ -7,4 +7,3 @@ textColor                = "#262730"      # near-black text
 baseRadius               = "large"        # radius used as basis for the corners of most UI elements
 font                     = "Roboto"      # Google-font string do, wont work!!
 
-OPENAI_API_KEY="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"
