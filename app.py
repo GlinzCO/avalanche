@@ -121,13 +121,6 @@ with col2:
 
 # Display the dataset if ingested
 if "df" in st.session_state:
-    st.subheader("Filter by Feature:")
-    col_a, col_b = st.columns([1,1])
-    with col_a:
-        product = st.selectbox(
-            "Choose a feature",
-            ["All Features"] + list(st.session_state["df"]["PRODUCT"].unique())
-        )
     st.subheader(f"Dataset Preview:")
 
     if product != "All Features":
@@ -141,7 +134,7 @@ if "df" in st.session_state:
     grouped = st.session_state["df"].groupby("PRODUCT")["SENTIMENT_SCORE"].mean() 
     st.bar_chart(grouped)
 
-# Plotting with Altair
+    # Plotting with Altair
     chart = alt.Chart(filtered_df).mark_bar().add_selection(
             alt.selection_interval()
         ).encode(
@@ -160,13 +153,19 @@ if "df" in st.session_state:
 
 
 
-
-
-
-
-# Sidebar: just with a logo 
+# Sidebar: show logo and dataset filter (filter only visible when dataset is loaded)
 with st.sidebar:
     st.image("https://www.glinz.co/wp-content/uploads/2017/11/GCO_Logo_v1_WebHeaderWhite_PDF7.png", use_container_width=False)
+
+    if "df" in st.session_state:
+        st.subheader("Filter by Feature")
+        product = st.selectbox(
+            "Choose a feature",
+            ["All Features"] + list(st.session_state["df"]["PRODUCT"].unique())
+        )
+    else:
+        # ensure 'product' is defined for later code paths
+        product = "All Features"
 
 st.divider()  # 👈 Draws a horizontal rule
 
