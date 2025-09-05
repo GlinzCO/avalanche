@@ -8,9 +8,8 @@ import pandas as pd
 from pathlib import Path
 import string
 from collections import deque
+import altair as alt
 
-import os
-print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
 
 # ------------------- RATE LIMITING SETUP (move to top!) -------------------
 max_requests = 5
@@ -210,8 +209,8 @@ if submit:
         speed = 10
 
         # Name using AI key from environment variable
-        with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png"): 
-            typewriter(text=text, speed=speed)
+        #with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png"): 
+        typewriter(text=text, speed=speed)
 
 
 
