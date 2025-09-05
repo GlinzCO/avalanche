@@ -108,8 +108,10 @@ with col1:
             csv_path = get_datset_path()
             st.session_state["df"] = pd.read_csv(csv_path)
             st.success("Dataset ingested successfully!")
-        except FileExistsError:
-            st.error("Dataset not found. Pleae check the file path ") 
+        except FileNotFoundError:
+            st.error("Dataset not found. Please check the file path ")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 
 with col2:
     if st.button("Parse Reviews"):
@@ -119,56 +121,71 @@ with col2:
     else:
         st.warning("Please ingest the dataset first.")
 
-# Display the dataset if ingested
-if "df" in st.session_state:
-    st.subheader(f"Dataset Preview:")
-
-    if product != "All Features":
-        filtered_df = st.session_state["df"][st.session_state["df"]["PRODUCT"] == product]
-    else:
-        filtered_df = st.session_state["df"]
-
-    st.dataframe(filtered_df.head(10))  # Display first 10 rows of the filtered dataset
-
-    st.subheader("Sentiment Score by Feature:")
-    grouped = st.session_state["df"].groupby("PRODUCT")["SENTIMENT_SCORE"].mean() 
-    st.bar_chart(grouped)
-
-    # Plotting with Altair
-    chart = alt.Chart(filtered_df).mark_bar().add_selection(
-            alt.selection_interval()
-        ).encode(
-            alt.X("SENTIMENT_SCORE:Q", bin=alt.Bin(maxbins=10), title="Sentiment Score"),
-            alt.Y("count():Q", title="Frequency"), tooltip=["count():Q"]
-        ).properties(
-            width=600,
-            height=400,
-            title="Sentiment Score Distribution"
-        )
-    st.altair_chart(chart, use_container_width=True)
-
-
-
-
-
-
-
 # Sidebar: show logo and dataset filter (filter only visible when dataset is loaded)
 with st.sidebar:
-    st.image("https://www.glinz.co/wp-content/uploads/2017/11/GCO_Logo_v1_WebHeaderWhite_PDF7.png", use_container_width=False)
+    st.image(
+        "https://www.glinz.co/wp-content/uploads/2017/11/GCO_Logo_v1_WebHeaderWhite_PDF7.png",
+        use_container_width=False
+    )
 
+    # Define product here so it's available when we render the main area below
     if "df" in st.session_state:
         st.subheader("Filter by Feature")
         product = st.selectbox(
             "Choose a feature",
-            ["All Features"] + list(st.session_state["df"]["PRODUCT"].unique())
+            ["All Features"] + list(st.session_state["df"]["PRODUCT"].unique()),
+            index=0
         )
     else:
-        # ensure 'product' is defined for later code paths
         product = "All Features"
 
 st.divider()  # 👈 Draws a horizontal rule
 
+# --- Display dataset preview and visualizations (visible only when dataset is loaded) ---
+if "df" in st.session_state:
+    df = st.session_state["df"]
+
+    # Apply product filter from sidebar (product is defined in the sidebar block)
+    if product != "All Features":
+        filtered_df = df[df["PRODUCT"] == product]
+    else:
+        filtered_df = df
+
+    st.subheader("Dataset Preview")
+    st.dataframe(filtered_df.head(50))
+
+    # Visualization(s)
+    # 1) Sentiment score distribution (if column exists)
+    if "SENTIMENT_SCORE" in filtered_df.columns:
+        st.subheader("Sentiment Score Distribution")
+        hist = (
+            alt.Chart(filtered_df)
+            .mark_bar()
+            .encode(
+                alt.X("SENTIMENT_SCORE:Q", bin=alt.Bin(maxbins=20), title="Sentiment Score"),
+                y="count():Q",
+                tooltip=["SENTIMENT_SCORE"]
+            )
+            .properties(width=700, height=300)
+        )
+        st.altair_chart(hist, use_container_width=True)
+
+        # 2) Average sentiment by product (use full df grouping so axis includes all products)
+        st.subheader("Average Sentiment by Product")
+        mean_df = df.groupby("PRODUCT", as_index=False)["SENTIMENT_SCORE"].mean()
+        bar = (
+            alt.Chart(mean_df)
+            .mark_bar()
+            .encode(
+                x=alt.X("PRODUCT:N", sort="-y", title="Product"),
+                y=alt.Y("SENTIMENT_SCORE:Q", title="Average Sentiment"),
+                tooltip=["PRODUCT", "SENTIMENT_SCORE"]
+            )
+            .properties(width=700, height=300)
+        )
+        st.altair_chart(bar, use_container_width=True)
+    else:
+        st.info("Column 'SENTIMENT_SCORE' not found — showing raw table only.")
 # Layout: two columns for user input and model settings
 col1, col2 = st.columns(2, gap="large")
 
