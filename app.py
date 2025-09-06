@@ -154,7 +154,7 @@ with col1:
         try:
             csv_path = get_datset_path()
             df = pd.read_csv(csv_path)
-            st.session_state["df"] = df.head(10)  # Store only first 10 rows for performance
+            st.session_state["df"] = df.head(20)  # Store only first 20 rows for performance
             st.success("Dataset ingested successfully!")
         except FileNotFoundError:
             st.error("Dataset not found. Please check the file path ")
