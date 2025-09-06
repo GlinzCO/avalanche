@@ -123,9 +123,15 @@ with col2:
 
 # Sidebar: show logo and dataset filter (filter only visible when dataset is loaded)
 with st.sidebar:
-    st.image(
-        "https://www.glinz.co/wp-content/uploads/2017/11/GCO_Logo_v1_WebHeaderWhite_PDF7.png",
-        use_container_width=False
+    # moved logo up by using inline HTML with a negative top margin
+    st.markdown(
+        """
+        <div style="margin-top:-50px; padding-top:0;">
+            <img src="https://www.glinz.co/wp-content/uploads/2017/11/GCO_Logo_v1_WebHeaderWhite_PDF7.png"
+                 style="max-width:240px; width:100%; display:block;" alt="logo"/>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     # Define product here so it's available when we render the main area below
@@ -160,7 +166,7 @@ if "df" in st.session_state:
         st.subheader("Sentiment Score Distribution")
         hist = (
             alt.Chart(filtered_df)
-            .mark_bar()
+            .mark_bar(color="#57c8e3")
             .encode(
                 alt.X("SENTIMENT_SCORE:Q", bin=alt.Bin(maxbins=20), title="Sentiment Score"),
                 y="count():Q",
@@ -175,7 +181,7 @@ if "df" in st.session_state:
         mean_df = df.groupby("PRODUCT", as_index=False)["SENTIMENT_SCORE"].mean()
         bar = (
             alt.Chart(mean_df)
-            .mark_bar()
+            .mark_bar(color="#57c8e3")
             .encode(
                 x=alt.X("PRODUCT:N", sort="-y", title="Product"),
                 y=alt.Y("SENTIMENT_SCORE:Q", title="Average Sentiment"),
@@ -223,7 +229,7 @@ if submit:
         text =  output_text
         speed = 10
 
-        # Name using AI key from environment variable
+
         #with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png"): 
         typewriter(text=text, speed=speed)
 

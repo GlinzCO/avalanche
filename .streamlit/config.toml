@@ -1,9 +1,25 @@
 [theme]
 base                     = "light"        # change to "dark" to switch modes
-primaryColor             = "#78d4e9ff"      # violet accent for widgets
-backgroundColor          = "#f8f9fa"      # off-white page background
-secondaryBackgroundColor = "#9ceaffff"      # light-violet panels / sidebar
+primaryColor             = "#f17116"      
+backgroundColor          = "#f1f3f3ff"      
+secondaryBackgroundColor = "#57c8e3"      
 textColor                = "#262730"      # near-black text
 baseRadius               = "large"        # radius used as basis for the corners of most UI elements
 font                     = "Roboto"      # Google-font string do, wont work!!
+dataframeHeaderBackgroundColor = "#dadadaff"      # gray
 
+# Color used for all links.
+# linkColor =
+
+# Whether or not links should be displayed with an underline.
+# linkUnderline =
+
+# Background color used for code blocks.
+# codeBackgroundColor =
+# headingFontSizes =
+# borderColor =
+# dataframeBorderColor =
+# showWidgetBorder =
+# showSidebarBorder =
+# chartCategoricalColors =
+# chartSequentialColors =
