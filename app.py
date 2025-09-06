@@ -34,6 +34,22 @@ load_dotenv()
 
 st.set_page_config(page_title="GenAI App", page_icon=":robot_face:", layout="wide") 
 
+# Reduce top padding so the page title appears higher
+st.markdown(
+    """
+    <style>
+        /* Move main content (including the title) higher */
+        .block-container {
+            padding-top: 0.25rem;
+        }
+        /* optional: tighten spacing for header elements */
+        .stHeader, header, .css-1v3fvcr {
+            margin-top: 0rem !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # CSS get Roboto
 st.markdown(
@@ -230,7 +246,7 @@ if submit:
         speed = 10
 
 
-        #with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png"): 
+        #with st.chat_message("AI", avatar="assets/VALIDANT_AI_logo_v0.3_Icon.png): 
         typewriter(text=text, speed=speed)
 
 

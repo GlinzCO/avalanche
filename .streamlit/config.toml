@@ -7,6 +7,9 @@ textColor                = "#262730"      # near-black text
 baseRadius               = "large"        # radius used as basis for the corners of most UI elements
 font                     = "Roboto"      # Google-font string do, wont work!!
 dataframeHeaderBackgroundColor = "#dadadaff"      # gray
+headingFontWeights       = [600, 500]
+headingFontSizes         = ["1.5rem", "1.25rem", "1.0rem"]
+
 
 # Color used for all links.
 # linkColor =
